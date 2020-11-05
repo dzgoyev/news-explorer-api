@@ -30,7 +30,9 @@
   },
   "homepage": "https://github.com/dzgoyev/news-explorer-api#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.12"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
