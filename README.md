@@ -1,1 +1,1 @@
-# news-explorer-api
+# Дипломная работа (back-end)

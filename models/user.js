@@ -1,68 +1,53 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
+const uniqueValidator = require('mongoose-unique-validator');
 
-const mongooseValidator = require('mongoose-unique-validator');
+const userSchema = new mongoose.Schema({
 
-const emailValidation = {
-  require: true,
-};
-
-const emailValidation = {
-  require: true,
-};
-
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxLength: 30,
-    },
-    email: {
-      type: String,
-      require: true,
-      unique: true,
-      validate: {
-        validator: (email) => validator.isEmail(email, emailValidation),
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator(email) {
+        return validator.isEmail(email);
       },
-    },
-    password: {
-      type: String,
-      require: true,
-      select: false,
+      message: 'Неверный email',
     },
   },
-  {
-    versionKey: false,
-  },
-);
 
-userSchema.statics.findUserByCredentials = function findUserByCredentials(
-  email,
-  password,
-) {
-  return this.findOne({ email })
-    .select('+password')
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    select: false,
+  },
+
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
+    required: true,
+  },
+});
+
+userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
+  return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(
-          new UnauthorizedError('Неправильные почта или пароль'),
-        );
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-
-      return bcryptjs.compare(password, user.password).then((matched) => {
-        if (!matched) {
-          return Promise.reject(
-            new UnauthorizedError('Неправильные почта или пароль'),
-          );
-        }
-        return user;
-      });
+      return bcryptjs.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            return Promise.reject.apply(new Error('Неправильные почта или пароль'));
+          }
+          return user;
+        });
     });
 };
 
-userSchema.plugin(mongooseValidator);
+userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('user', userSchema);
