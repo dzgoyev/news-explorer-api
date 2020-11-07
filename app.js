@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 const {
   PORT,
   MONGODB_ADRESS,
@@ -27,6 +28,7 @@ mongoose.connect(MONGODB_ADRESS, DB_OPTIONS);
 const app = express();
 
 app.use(cors(CORS_OPTIONS));
+app.use(helmet());
 app.use(cookieParser());
 app.use(limiter);
 app.use(bodyParser.json());
