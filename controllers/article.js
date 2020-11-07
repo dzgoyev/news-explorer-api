@@ -23,18 +23,14 @@ const createArticle = (req, res, next) => {
 };
 
 const deleteArticle = (req, res, next) => {
-  Article.findByIdAndRemove(req.params._id).select('+owner')
+  const owner = req.user._id;
+  Article.findOne({ _id: req.params._id }).select('+owner')
+    .orFail(() => new NotFoundError({ message: 'Нет такой новости' }))
     .then((article) => {
-      if (article.owner.toString() !== req.user._id) {
-        throw new ForbiddenError({ message: 'Недостаточно прав для выполнения операции' });
-      }
-      if (!article) {
-        throw new NotFoundError({ message: 'Новость не найдена' });
-      }
-      Article.deleteOne(article)
-        .then(() => res.send({ message: 'Успешное удаление' }))
-        .catch(next);
+      if (String(article.owner) !== owner) throw new ForbiddenError({ message: 'Недостаточно прав' });
+      return Article.findByIdAndDelete(article._id);
     })
+    .then(() => res.send({ message: 'Успешное удаление' }))
     .catch(next);
 };
 
