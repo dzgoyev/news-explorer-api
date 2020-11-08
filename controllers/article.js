@@ -24,11 +24,11 @@ const createArticle = (req, res, next) => {
 
 const deleteArticle = (req, res, next) => {
   const owner = req.user._id;
-  Article.findOne({ _id: req.params._id }).select('+owner')
+     Article.findById({ _id: req.params._id }).select('+owner')
     .orFail(() => new NotFoundError({ message: 'Нет такой новости' }))
     .then((article) => {
       if (String(article.owner) !== owner) throw new ForbiddenError({ message: 'Недостаточно прав' });
-      return Article.findByIdAndDelete(article._id);
+      return Article.deleteOne(article);
     })
     .then(() => res.send({ message: 'Успешное удаление' }))
     .catch(next);
