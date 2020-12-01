@@ -10,12 +10,11 @@ const ConflictError = require('../errors/ConflictError');
 
 const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError({ message: 'Такой пользователь не найден' });
-      }
-      res.send(user);
+    .orFail()
+    .catch(() => {
+      throw new NotFoundError({ message: 'Такой пользователь не найден' });
     })
+    .then((user) => res.send({ data: { email: user.email, name: user.name } }))
     .catch(next);
 };
 
@@ -53,9 +52,11 @@ const login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
-      })
-        .send({ message: 'Авторизация прошла успешно' });
+      });
+      res.send({ token });
     })
+    // .send({ message: 'Авторизация прошла успешно' });
+
     .catch(next);
 };
 

@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const {
@@ -28,6 +28,8 @@ mongoose.connect(MONGODB_ADRESS, DB_OPTIONS);
 const app = express();
 
 app.use(cors(CORS_OPTIONS));
+app.options('*', cors(CORS_OPTIONS));
+// app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 app.use(limiter);
