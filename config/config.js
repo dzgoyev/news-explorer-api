@@ -17,7 +17,7 @@ const limiter = rateLimit({
 });
 
 const CORS_OPTIONS = {
-  origin: ['http://localhost:3001', 'https://localhost:3000', 'http://localhost:3000', 'https://localhost:3001', 'https://dot2.students.nomoreparties.space'],
+  origin: ['http://localhost:3001', 'https://localhost:3000', 'http://localhost:3000', 'https://localhost:3001', 'https://dot2.students.nomoreparties.space', 'https://www.dot2.students.nomoreparties.space'],
   credentials: true,
 };
 
