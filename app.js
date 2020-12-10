@@ -11,7 +11,7 @@ const {
   PORT,
   MONGODB_ADRESS,
   DB_OPTIONS,
-  limiter,
+  // limiter,
   CORS_OPTIONS,
 } = require('./config/config');
 
@@ -32,7 +32,7 @@ app.options('*', cors(CORS_OPTIONS));
 // app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
-app.use(limiter);
+// app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);

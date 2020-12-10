@@ -12,12 +12,13 @@ const {
 const rateLimit = require('express-rate-limit');
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 156 * 606 * 10000,
   max: 100,
 });
 
 const CORS_OPTIONS = {
-  origin: ['http://localhost:3001', 'https://localhost:3000', 'http://localhost:3000', 'https://localhost:3001', 'https://dot2.students.nomoreparties.space', 'https://www.dot2.students.nomoreparties.space'],
+  origin: ['http://localhost:3001', 'https://localhost:3000', 'http://localhost:3000', 'https://localhost:3001', 'https://dot4.students.nomoreparties.space',
+  'https://www.dot4.students.nomoreparties.space', 'http://www.dot4.students.nomoreparties.space', 'http://dot4.students.nomoreparties.space'],
   credentials: true,
 };
 

@@ -48,11 +48,11 @@ const login = (req, res, next) => {
         throw new UnauthorizedError({ message: 'Неправильная почта или пароль' });
       }
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-      // res.cookie('jwt', token, {
-      //   maxAge: 3600000 * 24 * 7,
-      //   httpOnly: true,
-      //   sameSite: true,
-      // });
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+        sameSite: true,
+      });
       res.send({ token });
     })
     // .send({ message: 'Авторизация прошла успешно' });
