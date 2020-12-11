@@ -9,12 +9,23 @@ const UnauthorizedError = require('../errors/UnauthorizedError');
 const ConflictError = require('../errors/ConflictError');
 
 const getUserInfo = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail()
-    .catch(() => {
-      throw new NotFoundError({ message: 'Такой пользователь не найден' });
+//   User.findById(req.user._id)
+//     .orFail()
+//     .catch(() => {
+//       throw new NotFoundError({ message: 'Такой пользователь не найден' });
+//     })
+//     .then((user) => res.send({ data: { email: user.email, name: user.name } }))
+//     .catch(next);
+// };
+
+User.findById(req.user._id)
+// .orFail()
+    .then((data) => {
+      if (!data) {
+        throw new NotFoundError({ message: 'Такой пользователь не найден' });
+      }
+      res.status(200).send(data);
     })
-    .then((user) => res.send({ data: { email: user.email, name: user.name } }))
     .catch(next);
 };
 
